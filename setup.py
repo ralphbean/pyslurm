@@ -15,12 +15,38 @@ import sys, platform
 from string import *
 from stat import *
 
-include_dirs = ['/home/sgorget/pyslurm/include','/home/sgorget/src/slurm-2.2.1','/usr/include/slurm','/usr/include']
-library_dirs = ['/usr/lib/slurm', '/usr/lib']
+here = os.getcwd()
+
+include_dirs = [
+    here + '/include',
+    '/usr/include/slurm',
+    '/usr/include',
+    '/usr/local/include/slurm',
+    '/usr/local/include',
+]
+library_dirs = [
+    '/usr/lib/slurm',
+    '/usr/lib'
+    '/usr/local/lib/slurm',
+    '/usr/local/lib',
+]
 libraries = ['slurm']
-runtime_library_dirs = ['/usr/lib/slurm', '/usr/lib']
-#extra_link_args = [ '/usr/lib/slurm/auth_none.so']
-extra_objects = [ '/usr/lib/slurm/auth_none.so']
+runtime_library_dirs = [
+    '/usr/lib/slurm',
+    '/usr/lib',
+    '/usr/local/lib/slurm',
+    '/usr/local/lib',
+]
+extra_objects = [
+    obj for obj in [
+        '/usr/lib/slurm/auth_none.so',
+        '/usr/local/lib/slurm/auth_none.so',
+    ] if os.path.exists(obj)
+]
+
+if len(extra_objects) == 0:
+    print "Error:  Could not find `slurm/auth_none.so`"
+    sys.exit(1)
 
 classifiers = """\
 Development Status :: 4 - Beta
@@ -28,7 +54,7 @@ Intended Audience :: Developers
 License :: OSI Approved :: GNU General Public License (GPL)
 Natural Language :: English
 Operating System :: POSIX :: Linux
-rogramming Language :: Python
+Programming Language :: Python
 Topic :: Software Development :: Libraries :: Python Modules
 """
 
