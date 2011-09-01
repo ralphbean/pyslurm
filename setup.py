@@ -10,6 +10,7 @@ from distutils.command import clean
 from distutils.sysconfig import get_python_lib
 from Cython.Distutils import build_ext
 
+import optparse
 import os
 import re
 import sys
@@ -17,38 +18,52 @@ import platform
 from string import *
 from stat import *
 
+def die(msg, parser=None):
+    """ Die with a message. """
+
+    print
+    print "ERROR:", msg
+    print
+
+    if parser:
+        parser.print_help()
+
+    sys.exit(1)
+
+
+class opts(object):
+    """ Class to hold developer-specific options for the build.
+
+    Modify to meet your needs.
+    """
+
+    # Auth plugin used by slurm.  I.e., `munge` or `none`.
+    auth = 'munge'
+
+    # Prefix of slurm install.  I.e., if the libraries are in
+    # /opt/slurm/lib/slurm, then specify prefix=/opt/slurm.
+    prefix = '/usr/local'
+
+
 here = os.getcwd()
 
 include_dirs = [
     here + '/include',
-    '/usr/include/slurm',
-    '/usr/include',
-    '/usr/local/include/slurm',
-    '/usr/local/include',
+    opts.prefix + "/include",
+    opts.prefix + "/include/slurm",
 ]
 library_dirs = [
-    '/usr/lib/slurm',
-    '/usr/lib'
-    '/usr/local/lib/slurm',
-    '/usr/local/lib',
+    opts.prefix + "/lib",
+    opts.prefix + "/lib/slurm",
 ]
+runtime_library_dirs = library_dirs
 libraries = ['slurm']
-runtime_library_dirs = [
-    '/usr/lib/slurm',
-    '/usr/lib',
-    '/usr/local/lib/slurm',
-    '/usr/local/lib',
-]
-extra_objects = [
-    obj for obj in [
-        '/usr/lib/slurm/auth_none.so',
-        '/usr/local/lib/slurm/auth_none.so',
-    ] if os.path.exists(obj)
-]
 
-if len(extra_objects) == 0:
-    print "Error:  Could not find `slurm/auth_none.so`"
-    sys.exit(1)
+auth_plugin = "{opts.prefix}/lib/slurm/auth_{opts.auth}.so".format(opts=opts)
+extra_objects = [auth_plugin]
+
+if not os.path.exists(auth_plugin):
+    die("Could not find {auth_plugin}.".format(auth_plugin=auth_plugin))
 
 classifiers = """\
 Development Status :: 4 - Beta
