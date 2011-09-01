@@ -10,8 +10,10 @@ from distutils.command import clean
 from distutils.sysconfig import get_python_lib
 from Cython.Distutils import build_ext
 
-import os, re
-import sys, platform
+import os
+import re
+import sys
+import platform
 from string import *
 from stat import *
 
@@ -61,25 +63,24 @@ Topic :: Software Development :: Libraries :: Python Modules
 doclines = __doc__.split("\n")
 
 setup(
-    name = "pyslurm",
-    version = "0.0.1",
-    description = doclines[0],
-    long_description = "\n".join(doclines[2:]),
-    author = "Mark Roberts",
-    author_email = "mark at gingergeeks co uk",
-    url = "http://www.gingergeeks.co.uk/pyslurm/",
-    classifiers = filter(None, classifiers.split("\n")),
-    platforms = ["Linux"],
-    keywords = ["Batch Scheduler", "slurm"],
-    packages = ["pyslurm"],
-    ext_modules = [
-        Extension( "pyslurm.pyslurm",["pyslurm/pyslurm.pyx"],
-                   library_dirs = library_dirs,
-                   libraries = libraries,
-                   runtime_library_dirs = runtime_library_dirs,
-                   extra_objects = extra_objects,
-                   include_dirs = include_dirs)
+    name="pyslurm",
+    version="0.0.1",
+    description=doclines[0],
+    long_description="\n".join(doclines[2:]),
+    author="Mark Roberts",
+    author_email="mark at gingergeeks co uk",
+    url="http://www.gingergeeks.co.uk/pyslurm/",
+    classifiers=filter(None, classifiers.split("\n")),
+    platforms=["Linux"],
+    keywords=["Batch Scheduler", "slurm"],
+    packages=["pyslurm"],
+    ext_modules=[
+        Extension("pyslurm.pyslurm", ["pyslurm/pyslurm.pyx"],
+                   library_dirs=library_dirs,
+                   libraries=libraries,
+                   runtime_library_dirs=runtime_library_dirs,
+                   extra_objects=extra_objects,
+                   include_dirs=include_dirs)
     ],
-    cmdclass = {"build_ext": build_ext}
+    cmdclass={"build_ext": build_ext}
 )
-

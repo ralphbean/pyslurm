@@ -6,4 +6,3 @@ print pyslurm.slurm_get_job_steps.__doc__
 #print a
 #
 #print pyslurm.print_job_steps_info(b)
-
