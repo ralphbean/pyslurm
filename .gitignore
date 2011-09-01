@@ -1,0 +1,4 @@
+build
+pyslurm/pyslurm.c
+*.pyc
+*.swp
